@@ -18,8 +18,6 @@ export class UserService {
     user.password = password;
 
     db.users.push(user);
-
-    console.log(db.users);
     return this.buildUserRO(user);
   }
 
@@ -44,7 +42,7 @@ export class UserService {
     const user = await toPromise<UserEntity | null>(db.users.find((user) => user.id === userId));
 
     if (!user) throw new NotFoundException('User not found');
-    return user;
+    return this.buildUserRO(user);
   }
 
   async delete(userId: string) {
