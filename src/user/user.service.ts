@@ -22,7 +22,7 @@ export class UserService {
   }
 
   async updatePassword(userId: string, dto: UpdatePasswordDto) {
-    const user = await this.getById(userId);
+    const user = db.users.find((user) => user.id === userId);
 
     if (!user) throw new NotFoundException('User not found');
     if (user.password !== dto.oldPassword) throw new ForbiddenException('invalid old password');
