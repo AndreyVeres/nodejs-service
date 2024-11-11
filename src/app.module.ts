@@ -13,21 +13,26 @@ import { TrackEntity } from './track/track.entity';
 import { AlbumEntity } from './album/album.entity';
 import { ArtistEntity } from './artist/artist.entity';
 import { FavoriteEntity } from './favorites/favorites.entity';
+import { config } from 'dotenv';
+config({ path: '.env' });
+
 @Module({
   imports: [
-    ConfigModule.forRoot(),
     UserModule,
     TrackModule,
     ArtistModule,
     AlbumModule,
     FavoriteModule,
+    ConfigModule.forRoot({
+      envFilePath: '../.env',
+    }),
     TypeOrmModule.forRoot({
       type: 'postgres',
-      host: 'db',
+      host: process.env.POSTGRES_HOST,
       port: +process.env.PORT_POSTGRES,
-      username: 'postgres',
-      password: 'postgres',
-      database: 'postgres',
+      username: process.env.POSTGRES_USERNAME,
+      password: process.env.POSTGRES_PASSWORD,
+      database: process.env.POSTGRES_DATABASE,
       entities: [UserEntity, TrackEntity, AlbumEntity, ArtistEntity, FavoriteEntity],
       synchronize: true,
       autoLoadEntities: true,

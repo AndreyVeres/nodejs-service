@@ -19,6 +19,10 @@ services:
     container_name: nest-docker-postgres
     environment:
       - PORT=${PORT}
+      - POSTGRES_USERNAME=${POSTGRES_USERNAME}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DATABASE=${POSTGRES_DATABASE}
+      - POSTGRES_HOST=${POSTGRES_HOST}
     ports:
       - '${PORT}:${PORT}'
     depends_on:

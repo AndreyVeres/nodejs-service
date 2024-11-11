@@ -10,7 +10,6 @@ import { TrackEntity } from 'src/track/track.entity';
 import { FavoriteEntity } from './favorites.entity';
 import { AlbumEntity } from 'src/album/album.entity';
 import { ArtistEntity } from 'src/artist/artist.entity';
-// FavoriteEntity
 @Module({
   imports: [
     AlbumModule,
