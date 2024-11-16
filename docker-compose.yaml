@@ -1,14 +1,22 @@
 version: '3.5'
 
+networks:
+  app_network:
+    driver: bridge
+
 services:
   db:
-    image: postgres
+    build:
+      context: .
+      dockerfile: Dockerfile-postgres
+    networks:
+      - app_network
     restart: always
     environment:
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
     container_name: postgres
     volumes:
-      - ./pgdata:/var/lib/postgresql/data
+      - pg-volume:/var/lib/postgresql/data
     ports:
       - '${PORT_POSTGRES}:${PORT_POSTGRES}'
 
@@ -16,7 +24,9 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: nest-docker-postgres
+    networks:
+      - app_network
+    container_name: nest-app
     environment:
       - PORT=${PORT}
       - POSTGRES_USERNAME=${POSTGRES_USERNAME}
@@ -25,19 +35,20 @@ services:
       - POSTGRES_HOST=${POSTGRES_HOST}
     ports:
       - '${PORT}:${PORT}'
-    depends_on:
-      - db
     volumes:
       - ./src:/app/src
 
-  pgadmin:
-    image: dpage/pgadmin4
-    restart: always
-    container_name: nest-pgadmin4
-    environment:
-      - PGADMIN_DEFAULT_EMAIL=${PGADMIN_DEFAULT_EMAIL}
-      - PGADMIN_DEFAULT_PASSWORD=${PGADMIN_DEFAULT_PASSWORD}
-    ports:
-      - '5050:80'
-    depends_on:
-      - db
+volumes:
+  pg-volume:
+
+  # pgadmin:
+  #   image: dpage/pgadmin4
+  #   restart: always
+  #   container_name: pgadmin4
+  #   environment:
+  #     - PGADMIN_DEFAULT_EMAIL=${PGADMIN_DEFAULT_EMAIL}
+  #     - PGADMIN_DEFAULT_PASSWORD=${PGADMIN_DEFAULT_PASSWORD}
+  #   ports:
+  #     - '5050:80'
+  #   depends_on:
+  #     - db
